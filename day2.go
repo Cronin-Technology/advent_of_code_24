@@ -68,13 +68,15 @@ func CheckDataAgain(data []int, index int) bool {
 		e = slices.Delete(e, index+1, index+2)
 		f = slices.Delete(f, index, index+1)
 	} else if index == len(data)-1 {
-		d = slices.Delete(d, index-2, index-1)
-		e = slices.Delete(e, index-1, index)
-		f = slices.Delete(f, index-2, index-1)
+		d = slices.Delete(d, index-1, index)
+		e = slices.Delete(e, index-2, index)
+		f = slices.Delete(f, index-1, index)
 	}
+
 	if CheckData(d) || CheckData(e) || CheckData(f) {
 		return true
 	} else {
+		fmt.Println(data, d, e, f, index)
 		//fmt.Println(data, ":", d, ":", e, " ", index)
 		return false
 	}
