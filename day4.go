@@ -17,7 +17,9 @@ type coordinate struct {
 }
 
 var grid = make(map[string]coordinate)
+var grod = make(map[string]coordinate)
 var count int
+var count2 int
 
 func main() {
 	readFile, err := os.Open("day4.txt")
@@ -34,12 +36,11 @@ func main() {
 			a := makeCoordinate(x, y)
 			b := coordinate{s[i], x, y, false, 0}
 			grid[a] = b
+			grod[a] = b
 			x += 1
 		}
 		y += 1
 	}
-	fmt.Println(grid)
-	fmt.Println("+++++++++++++++++")
 	for k, _ := range grid {
 		checkXmas(up(grid[k]))
 		checkXmas(down(grid[k]))
@@ -50,12 +51,49 @@ func main() {
 		checkXmas(downLeft(grid[k]))
 		checkXmas(downRight(grid[k]))
 	}
-	fmt.Println(grid)
+
+	for j, _ := range grod {
+		searchXmas(grid[j])
+	}
 	fmt.Println("Part 1: ", count)
+	fmt.Println("Part 2: ", count2)
 }
 
-func searchXmas() {
-
+func searchXmas(c coordinate) {
+	var z []coordinate
+	x := c.x
+	y := c.y
+	if grod[makeCoordinate(x, y)].value == "A" {
+		a := makeCoordinate(x-1, y-1)
+		if value, ok := grod[a]; ok {
+			z = append(z, value)
+		}
+		b := makeCoordinate(x-1, y+1)
+		if value, ok := grod[b]; ok {
+			z = append(z, value)
+		}
+		e := makeCoordinate(x+1, y-1)
+		if value, ok := grod[e]; ok {
+			z = append(z, value)
+		}
+		f := makeCoordinate(x+1, y+1)
+		if value, ok := grod[f]; ok {
+			z = append(z, value)
+		}
+		if len(z) == 4 {
+			ma := false
+			ms := false
+			if grod[a].value == "M" && grod[f].value == "S" || grod[a].value == "S" && grod[f].value == "M" {
+				ma = true
+			}
+			if grod[b].value == "M" && grod[e].value == "S" || grod[b].value == "S" && grod[e].value == "M" {
+				ms = true
+			}
+			if ma && ms {
+				count2 += 1
+			}
+		}
+	}
 }
 
 func checkXmas(z []coordinate) {
@@ -92,7 +130,6 @@ func up(c coordinate) []coordinate {
 			z = append(z, value)
 		}
 	}
-
 	return z
 }
 
