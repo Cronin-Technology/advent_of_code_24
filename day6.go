@@ -99,18 +99,6 @@ func GuardMovement() {
 			points[a] = point{"X", points[a].x, points[a].y, true, di, points[a].c + 1}
 			current = next
 		}
-		// fmt.Println("RUN : ", z)
-		// z += 1
-		// fmt.Println("@@@@@@@@@@@@@@@@")
-		// for i := range maxX {
-		// 	con := ""
-		// 	for j := range maxY {
-		// 		a := makePoint(j, i)
-		// 		con += points[a].value
-		// 	}
-		// 	fmt.Println(con)
-		// }
-		// fmt.Println("@@@@@@@@@@@@@@@@")
 	}
 }
 
@@ -164,7 +152,7 @@ func GuardMovementParadox(para map[string]point) bool {
 		} else {
 			if para[a].p {
 				if slices.Contains(para[a].d, getDirection(direction)) {
-					fmt.Println(para[a].d, getDirection(direction))
+					//fmt.Println(para[a].d, getDirection(direction))
 					return true
 				}
 			}
@@ -187,7 +175,6 @@ func getDirection(d []int) string {
 	} else if d[0] == -1 && d[1] == 0 {
 		return "left"
 	}
-	fmt.Println("ERROR!!!!!!")
 	return "broken"
 }
 
