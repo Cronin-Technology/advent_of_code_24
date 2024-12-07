@@ -164,6 +164,7 @@ func GuardMovementParadox(para map[string]point) bool {
 		} else {
 			if para[a].p {
 				if slices.Contains(para[a].d, getDirection(direction)) {
+					fmt.Println(para[a].d, getDirection(direction))
 					return true
 				}
 			}
