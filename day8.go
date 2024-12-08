@@ -53,6 +53,8 @@ func main() {
 
 	//getPairs()
 
+	getPairs()
+
 	for i := range maxX {
 		con := ""
 		for j := range maxY {
@@ -67,7 +69,6 @@ func main() {
 		fmt.Println(con)
 	}
 
-	getPairs()
 	fmt.Println("Part 1: ")
 
 	fmt.Println("Part 2: ")
@@ -77,6 +78,7 @@ func getPairs() {
 	a := make(map[string][]string)
 	temp := []string{}
 	unique := []string{}
+	//pair := [][2]string{}
 	for _, v := range location {
 		if !slices.Contains(unique, v.value) && v.value != "." {
 			unique = append(unique, v.value)
@@ -92,7 +94,50 @@ func getPairs() {
 		}
 		a[unique[i]] = temp
 	}
-	fmt.Println(a)
+
+	for _, value := range a {
+		// fmt.Println(key, ":", value)
+		// fmt.Println(key, ":", makePairs(value))
+		p := makePairs(value)
+		for i := range len(p) {
+			x1, y1 := getPoint(p[i][0])
+			x2, y2 := getPoint(p[i][1])
+			xt := getAbsInt(x1, x2) * 2
+			yt := getAbsInt(y1, y2) * 2
+			if y1 < y2 && x1 < x2 {
+				w := location[makePoint(x1+xt, y1+yt)]
+				q := location[makePoint(x2-xt, y2-yt)]
+				location[makePoint(x1+xt, y1+yt)] = loci{w.value, w.x, w.y, true, w.d, w.c}
+				location[makePoint(x2-xt, y2-yt)] = loci{q.value, q.x, q.y, true, q.d, q.c}
+			} else if y1 < y2 && x1 > x2 {
+				w := location[makePoint(x1+xt, y1+yt)]
+				q := location[makePoint(x2-xt, y2-yt)]
+				location[makePoint(x1+xt, y1+yt)] = loci{w.value, w.x, w.y, true, w.d, w.c}
+				location[makePoint(x2-xt, y2-yt)] = loci{q.value, q.x, q.y, true, q.d, q.c}
+			}
+		}
+	}
+}
+
+func getAbsInt(x, y int) int {
+	if x < y {
+		return y - x
+	}
+	return x - y
+}
+
+func makePairs(strings []string) [][2]string {
+	var pairs [][2]string
+
+	// Iterate over the slice
+	for i := 0; i < len(strings); i++ {
+		for j := i + 1; j < len(strings); j++ {
+			// Add the pair (strings[i], strings[j])
+			pairs = append(pairs, [2]string{strings[i], strings[j]})
+		}
+	}
+
+	return pairs
 }
 
 func getPoint(a string) (int, int) {
