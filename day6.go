@@ -18,17 +18,17 @@ type point struct {
 	c     int
 }
 
-var points = make(map[string]point)
-var paradox = make(map[string]point)
-var start []int
-var direction string
-var step int
-var maxX int
-var maxY int
-var pointCount int
+// var points = make(map[string]point)
+// var paradox = make(map[string]point)
+// var start []int
+// var direction string
+// var step int
+// var maxX int
+// var maxY int
+// var pointCount int
 
 func main() {
-	readFile, err := os.Open("day6.txt")
+	readFile, err := os.Open("test.txt")
 	if err != nil {
 		fmt.Println(err)
 	}
