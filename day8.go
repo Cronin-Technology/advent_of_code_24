@@ -28,7 +28,7 @@ func main() {
 
 	part1 := 0
 	part2 := 0
-	readFile, err := os.Open("test.txt")
+	readFile, err := os.Open("day8.txt")
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -112,55 +112,92 @@ func getPairs() {
 		temp = []string{}
 	}
 
-	for _, value := range a {
-		// fmt.Println(key, ":", value)
-		//fmt.Println(key, ":", makePairs(value))
+	for key, value := range a {
 		p := makePairs(value)
 		for i := range len(p) {
+			slope := []int{}
+			r := 0
+			q := 1
 			x1, y1 := getPoint(p[i][0])
 			x2, y2 := getPoint(p[i][1])
-			xt := getAbsInt(x1, x2) * 2
-			yt := getAbsInt(y1, y2) * 2
-			r := 0
-			loop := 0
+			// if y1 > y2 {
+			// 	x1, y1 = getPoint(p[i][1])
+			// 	x2, y2 = getPoint(p[i][0])
+			// }
+			slope = append(slope, x2-x1)
+			slope = append(slope, y2-y1)
+			fmt.Println(key, x1, y1, x2, y2, "::", slope)
 			for ok := true; ok; ok = (r != 2) {
-				xt = xt + (loop * xt)
-				yt = yt + (loop * yt)
-				if y1 < y2 {
-					if x1 > x2 {
-						w := l[makePoint(x1-xt, y1+yt)]
-						q := l[makePoint(x2+xt, y2-yt)]
-						l[makePoint(x1-xt, y1+yt)] = loci{w.value, w.x, w.y, true, w.d, w.c}
-						l[makePoint(x2+xt, y2-yt)] = loci{q.value, q.x, q.y, true, q.d, q.c}
-					} else { //x1 < x2
-						w := l[makePoint(x1+xt, y1+yt)]
-						q := l[makePoint(x2-xt, y2-yt)]
-						l[makePoint(x1+xt, y1+yt)] = loci{w.value, w.x, w.y, true, w.d, w.c}
-						l[makePoint(x2-xt, y2-yt)] = loci{q.value, q.x, q.y, true, q.d, q.c}
-					}
-				} else if y1 > y2 {
-					if x1 > x2 {
-						w := l[makePoint(x1-xt, y1-yt)]
-						q := l[makePoint(x2+xt, y2+yt)]
-						l[makePoint(x1-xt, y1-yt)] = loci{w.value, w.x, w.y, true, w.d, w.c}
-						l[makePoint(x2+xt, y2+yt)] = loci{q.value, q.x, q.y, true, q.d, q.c}
-					} else { //x1 < x2
-						w := l[makePoint(x1+xt, y1-yt)]
-						q := l[makePoint(x2-xt, y2+yt)]
-						l[makePoint(x1+xt, y1-yt)] = loci{w.value, w.x, w.y, true, w.d, w.c}
-						l[makePoint(x2-xt, y2+yt)] = loci{q.value, q.x, q.y, true, q.d, q.c}
-					}
-				}
-				if loop > 100 {
+				f := makePoint(x1-(q*slope[0]), y1-(q*slope[0]))
+				if x1-(q*slope[0]) >= 0 && x1-(q*slope[0]) <= maxX && y1-(q*slope[0]) >= 0 && y1-(q*slope[0]) <= maxY {
+					l[f] = loci{"#", x1 - (q * slope[0]), y1 - (q * slope[0]), true, []string{}, 1}
+				} else {
 					r = 2
 				}
-
-				loop += 1
+				q += 1
+			}
+			r = 0
+			q = 1
+			for ok := true; ok; ok = (r != 2) {
+				f := makePoint(x2+(q*slope[1]), y2+(q*slope[1]))
+				if x2+(q*slope[1]) >= 0 && x2+(q*slope[1]) <= maxX && y2+(q*slope[1]) >= 0 && y2+(q*slope[1]) <= maxY {
+					l[f] = loci{"#", x2 + (q * slope[1]), y2 + (q * slope[1]), true, []string{}, 1}
+				} else {
+					r = 2
+				}
+				q += 1
 			}
 		}
 	}
-
 }
+
+// for _, value := range a {
+// 	// fmt.Println(key, ":", value)
+// 	//fmt.Println(key, ":", makePairs(value))
+// 	p := makePairs(value)
+// 	for i := range len(p) {
+// 		x1, y1 := getPoint(p[i][0])
+// 		x2, y2 := getPoint(p[i][1])
+// 		xt := getAbsInt(x1, x2) * 2
+// 		yt := getAbsInt(y1, y2) * 2
+// 		r := 0
+// 		loop := 0
+// 		for ok := true; ok; ok = (r != 2) {
+// 			xt = xt + (loop * xt)
+// 			yt = yt + (loop * yt)
+// 			if y1 < y2 {
+// 				if x1 > x2 {
+// 					w := l[makePoint(x1-xt, y1+yt)]
+// 					q := l[makePoint(x2+xt, y2-yt)]
+// 					l[makePoint(x1-xt, y1+yt)] = loci{w.value, w.x, w.y, true, w.d, w.c}
+// 					l[makePoint(x2+xt, y2-yt)] = loci{q.value, q.x, q.y, true, q.d, q.c}
+// 				} else { //x1 < x2
+// 					w := l[makePoint(x1+xt, y1+yt)]
+// 					q := l[makePoint(x2-xt, y2-yt)]
+// 					l[makePoint(x1+xt, y1+yt)] = loci{w.value, w.x, w.y, true, w.d, w.c}
+// 					l[makePoint(x2-xt, y2-yt)] = loci{q.value, q.x, q.y, true, q.d, q.c}
+// 				}
+// 			} else if y1 > y2 {
+// 				if x1 > x2 {
+// 					w := l[makePoint(x1-xt, y1-yt)]
+// 					q := l[makePoint(x2+xt, y2+yt)]
+// 					l[makePoint(x1-xt, y1-yt)] = loci{w.value, w.x, w.y, true, w.d, w.c}
+// 					l[makePoint(x2+xt, y2+yt)] = loci{q.value, q.x, q.y, true, q.d, q.c}
+// 				} else { //x1 < x2
+// 					w := l[makePoint(x1+xt, y1-yt)]
+// 					q := l[makePoint(x2-xt, y2+yt)]
+// 					l[makePoint(x1+xt, y1-yt)] = loci{w.value, w.x, w.y, true, w.d, w.c}
+// 					l[makePoint(x2-xt, y2+yt)] = loci{q.value, q.x, q.y, true, q.d, q.c}
+// 				}
+// 			}
+// 			if loop > 100 {
+// 				r = 2
+// 			}
+
+// 			loop += 1
+// 		}
+// 	}
+// }
 
 func getAntinodes() {
 	a := make(map[string][]string)
