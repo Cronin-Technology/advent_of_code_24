@@ -17,7 +17,7 @@ var directions = []struct{ dx, dy int }{
 	{0, -1}, // left
 }
 
-func bfs(mapData [][]int, startX, startY, targetX, targetY int) (int, [][][2]int) {
+func bfs(mapData [][]int, startX, startY, targetX, targetY int) [][][2]int {
 	queue := [][]int{{startX, startY}} // BFS queue (stores coordinates)
 	paths := map[[2]int][][][2]int{}   // To store all paths ending at a position
 	paths[[2]int{startX, startY}] = [][][2]int{{{startX, startY}}}
@@ -30,13 +30,14 @@ func bfs(mapData [][]int, startX, startY, targetX, targetY int) (int, [][][2]int
 		x, y := curr[0], curr[1]
 
 		// Check if we reached the target (elevation 9)
+		//if mapData[x][y] == target {
 		if x == targetX && y == targetY {
 			// Collect all paths that lead to the target
 			var result [][][2]int
 			for _, path := range paths[[2]int{x, y}] {
 				result = append(result, path)
 			}
-			return len(result), result
+			return result
 		}
 
 		// Explore neighboring cells
@@ -54,7 +55,7 @@ func bfs(mapData [][]int, startX, startY, targetX, targetY int) (int, [][][2]int
 			}
 		}
 	}
-	return 0, nil
+	return nil
 }
 
 func main() {
@@ -85,33 +86,42 @@ func main() {
 		COLS = len(input)
 		mapData = append(mapData, temp)
 	}
-
+	targets := [][]int{}
+	starts := [][]int{}
 	for k := 0; k < ROWS; k++ {
 		for l := 0; l < COLS; l++ {
 			if mapData[k][l] == 9 {
-				targetX, targetY := l, k
-				for i := 0; i < ROWS; i++ {
-					for j := 0; j < COLS; j++ {
-						if mapData[i][j] == 0 {
-							startX, startY := j, i
-
-							_, paths := bfs(mapData, startX, startY, targetX, targetY)
-							if paths != nil {
-								fmt.Println("Paths from 0 to 9 with increments of 1:")
-								// for _, path := range paths {
-								// 	fmt.Println(len(path))
-								// }
-								count += 1
-							} else {
-								fmt.Println("No paths found.")
-							}
-						}
-					}
-				}
+				targets = append(targets, []int{l, k})
 			}
 		}
 	}
-	// Start BFS from position (0, 0) (elevation 0)
+	for i := 0; i < ROWS; i++ {
+		for j := 0; j < COLS; j++ {
+			if mapData[i][j] == 0 {
+				starts = append(starts, []int{j, i})
+			}
+		}
+	}
+
+	fmt.Println(starts)
+	fmt.Println(targets)
+
+	for s := range len(starts) {
+		//target := 9
+		for t := range len(targets) {
+			paths := bfs(mapData, starts[s][0], starts[s][1], targets[t][0], targets[t][1])
+			if paths != nil {
+				fmt.Println("Paths from 0 to 9 with increments of 1:")
+				for _, path := range paths {
+					fmt.Println(path)
+					count += 1
+				}
+			} else {
+				fmt.Println("No paths found.")
+			}
+		}
+
+	}
 
 	fmt.Println("Part 1:", count)
 }
