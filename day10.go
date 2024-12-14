@@ -67,7 +67,7 @@ func main() {
 	// 	{9, 8, 7, 6},
 	// }
 	mapData := [][]int{}
-	readFile, err := os.Open("test.txt")
+	readFile, err := os.Open("day10.txt")
 
 	if err != nil {
 		fmt.Println(err)
@@ -90,14 +90,14 @@ func main() {
 	starts := [][]int{}
 	for k := 0; k < ROWS; k++ {
 		for l := 0; l < COLS; l++ {
-			if mapData[k][l] == 9 {
+			if mapData[l][k] == 9 {
 				targets = append(targets, []int{l, k})
 			}
 		}
 	}
 	for i := 0; i < ROWS; i++ {
 		for j := 0; j < COLS; j++ {
-			if mapData[i][j] == 0 {
+			if mapData[j][i] == 0 {
 				starts = append(starts, []int{j, i})
 			}
 		}
