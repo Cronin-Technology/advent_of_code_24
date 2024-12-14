@@ -151,54 +151,6 @@ func getPairs() {
 	}
 }
 
-// for _, value := range a {
-// 	// fmt.Println(key, ":", value)
-// 	//fmt.Println(key, ":", makePairs(value))
-// 	p := makePairs(value)
-// 	for i := range len(p) {
-// 		x1, y1 := getPoint(p[i][0])
-// 		x2, y2 := getPoint(p[i][1])
-// 		xt := getAbsInt(x1, x2) * 2
-// 		yt := getAbsInt(y1, y2) * 2
-// 		r := 0
-// 		loop := 0
-// 		for ok := true; ok; ok = (r != 2) {
-// 			xt = xt + (loop * xt)
-// 			yt = yt + (loop * yt)
-// 			if y1 < y2 {
-// 				if x1 > x2 {
-// 					w := l[makePoint(x1-xt, y1+yt)]
-// 					q := l[makePoint(x2+xt, y2-yt)]
-// 					l[makePoint(x1-xt, y1+yt)] = loci{w.value, w.x, w.y, true, w.d, w.c}
-// 					l[makePoint(x2+xt, y2-yt)] = loci{q.value, q.x, q.y, true, q.d, q.c}
-// 				} else { //x1 < x2
-// 					w := l[makePoint(x1+xt, y1+yt)]
-// 					q := l[makePoint(x2-xt, y2-yt)]
-// 					l[makePoint(x1+xt, y1+yt)] = loci{w.value, w.x, w.y, true, w.d, w.c}
-// 					l[makePoint(x2-xt, y2-yt)] = loci{q.value, q.x, q.y, true, q.d, q.c}
-// 				}
-// 			} else if y1 > y2 {
-// 				if x1 > x2 {
-// 					w := l[makePoint(x1-xt, y1-yt)]
-// 					q := l[makePoint(x2+xt, y2+yt)]
-// 					l[makePoint(x1-xt, y1-yt)] = loci{w.value, w.x, w.y, true, w.d, w.c}
-// 					l[makePoint(x2+xt, y2+yt)] = loci{q.value, q.x, q.y, true, q.d, q.c}
-// 				} else { //x1 < x2
-// 					w := l[makePoint(x1+xt, y1-yt)]
-// 					q := l[makePoint(x2-xt, y2+yt)]
-// 					l[makePoint(x1+xt, y1-yt)] = loci{w.value, w.x, w.y, true, w.d, w.c}
-// 					l[makePoint(x2-xt, y2+yt)] = loci{q.value, q.x, q.y, true, q.d, q.c}
-// 				}
-// 			}
-// 			if loop > 100 {
-// 				r = 2
-// 			}
-
-// 			loop += 1
-// 		}
-// 	}
-// }
-
 func getAntinodes() {
 	a := make(map[string][]string)
 	temp := []string{}
