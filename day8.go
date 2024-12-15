@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"slices"
-	"strconv"
 	"strings"
 )
 
@@ -233,13 +232,13 @@ func makePairs(strings []string) [][2]string {
 	return pairs
 }
 
-func getPoint(a string) (int, int) {
-	b := strings.Split(a, ":")
-	bx, _ := strconv.Atoi(b[0])
-	by, _ := strconv.Atoi(b[1])
-	return bx, by
-}
+// func getPoint(a string) (int, int) {
+// 	b := strings.Split(a, ":")
+// 	bx, _ := strconv.Atoi(b[0])
+// 	by, _ := strconv.Atoi(b[1])
+// 	return bx, by
+// }
 
-func makePoint(x int, y int) string {
-	return (strconv.Itoa(x) + ":" + strconv.Itoa(y))
-}
+// func makePoint(x int, y int) string {
+// 	return (strconv.Itoa(x) + ":" + strconv.Itoa(y))
+// }
