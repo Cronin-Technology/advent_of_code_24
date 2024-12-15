@@ -21,12 +21,13 @@ type bot struct {
 }
 
 var warehouse = make(map[string]tile)
+var doubleWarehouse = make(map[string]tile)
 var walle bot
 var instructions []string
 var maxCols, maxRows int
 
 func main() {
-	readFile, err := os.Open("day15.txt")
+	readFile, err := os.Open("test.txt")
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -36,14 +37,40 @@ func main() {
 	for fileScanner.Scan() {
 		s := strings.Split(fileScanner.Text(), "")
 		col := 0
+		col2 := 0
 		for i := range len(s) {
 			a := makePoint(col, row)
+			c := makePoint(col2, row)
+			e := makePoint(col2+1, row)
 			b := tile{s[i], col, row, false}
 			if s[i] == "@" {
 				walle = bot{col, row, col, row}
 				b = tile{".", col, row, false}
+				d := tile{"@", col2, row, false}
+				d2 := tile{".", col2 + 1, row, false}
+				doubleWarehouse[c] = d
+				doubleWarehouse[e] = d2
+			}
+			if s[i] == "." {
+				d := tile{".", col2, row, false}
+				d2 := tile{".", col2 + 1, row, false}
+				doubleWarehouse[c] = d
+				doubleWarehouse[e] = d2
+			}
+			if s[i] == "#" {
+				d := tile{"#", col2, row, false}
+				d2 := tile{"#", col2 + 1, row, false}
+				doubleWarehouse[c] = d
+				doubleWarehouse[e] = d2
+			}
+			if s[i] == "O" {
+				d := tile{"[", col2, row, false}
+				d2 := tile{"]", col2 + 1, row, false}
+				doubleWarehouse[c] = d
+				doubleWarehouse[e] = d2
 			}
 			warehouse[a] = b
+			col2 += 2
 			col += 1
 		}
 		maxCols = col
@@ -52,7 +79,7 @@ func main() {
 	maxRows = row
 
 	readFile.Close()
-	readFile1, err := os.Open("day15_2.txt")
+	readFile1, err := os.Open("test2.txt")
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -74,6 +101,7 @@ func main() {
 
 	printWarehouse()
 
+	printWarehouseDouble()
 	fmt.Println("Part 1 : ", calculateWarehouse())
 
 }
@@ -169,6 +197,20 @@ func printWarehouse() {
 				con += "@"
 			} else {
 				con += (warehouse[makePoint(j, i)].value)
+			}
+		}
+		fmt.Println(con)
+	}
+}
+
+func printWarehouseDouble() {
+	for i := range maxRows {
+		con := ""
+		for j := range maxCols * 2 {
+			if walle.currentX == j && walle.currentY == i {
+				con += "@"
+			} else {
+				con += (doubleWarehouse[makePoint(j, i)].value)
 			}
 		}
 		fmt.Println(con)
