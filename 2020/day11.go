@@ -17,6 +17,8 @@ type Seat struct {
 
 var Seating = [][2]int{}
 var Seats = []Seat{}
+var FarSeating = [][2]int{}
+var FarSeats = []Seat{}
 
 var maxSeatX int
 var minSeatY int
@@ -38,15 +40,15 @@ func main() {
 			//a := makePoint(x, y)
 			b := Seat{s[i], x, y, false}
 			Seating = append(Seating, [2]int{x, y})
+			FarSeating = append(Seating, [2]int{x, y})
 			Seats = append(Seats, b)
+			FarSeats = append(Seats, b)
 			x += 1
 		}
 		maxSeatX = x
 		y -= 1
 	}
 	minSeatY = y
-	printSeating()
-	fmt.Println("____________________________")
 	readFile.Close()
 	fmt.Println("Day 11 Part One Answer: ", dayEleven_PartOne())
 	fmt.Println("Day 11 Part Two Answer: ", dayEleven_PartTwo())
@@ -133,6 +135,52 @@ func findFlips() {
 	}
 }
 
+func findFarFlips() {
+	sX, sY := 0, 0
+	for sY > minSeatY {
+		for sX < maxSeatX {
+			update := false
+			occupied := 0
+			empty := 0
+			tmp := Seats[slices.Index(Seating, [2]int{sX, sY})].v
+			adj := [][2]int{}
+			a := ""
+			x := sX
+			y := sY
+			dir := []
+			if slices.Index(FarSeating, ) != -1 {
+				if Seats[slices.Index(Seating, adj[a])].v == "#" {
+					dir = append(dir,  Seats[slices.Index(Seating, adj[a])].v)
+				} else if Seats[slices.Index(Seating, adj[a])].v == "L" {
+					empty++
+				}
+			}
+			for a := range adj {
+				if slices.Index(Seating, adj[a]) != -1 {
+					if Seats[slices.Index(Seating, adj[a])].v == "#" {
+						occupied++
+					} else if Seats[slices.Index(Seating, adj[a])].v == "L" {
+						empty++
+					}
+				}
+			}
+			if tmp == "L" && occupied == 0 {
+				update = true
+			} else if tmp == "#" && occupied >= 4 {
+				update = true
+			} else if tmp == "." {
+				update = false
+			} else {
+				update = false
+			}
+			Seats[slices.Index(Seating, [2]int{sX, sY})].flip = update
+			sX += 1
+		}
+		sY -= 1
+		sX = 0
+	}
+}
+
 func executeFlips() {
 	sX, sY := 0, 0
 	for sY > minSeatY {
@@ -174,7 +222,49 @@ func checkChange() bool {
 }
 
 func dayEleven_PartTwo() int {
-	return 0
+	result := 0
+	sX, sY := 0, 0
+	for sY > minSeatY {
+		for sX < maxSeatX {
+			a := slices.Index(Seating, [2]int{sX, sY})
+			PreviousSeating = append(PreviousSeating, Seats[a].v)
+			sX += 1
+		}
+		sY -= 1
+		sX = 0
+	}
+
+	findFarFlips()
+	executeFlips()
+	for !checkChange() {
+		sX, sY = 0, 0
+		PreviousSeating = []string{}
+		for sY > minSeatY {
+			for sX < maxSeatX {
+				a := slices.Index(Seating, [2]int{sX, sY})
+				PreviousSeating = append(PreviousSeating, Seats[a].v)
+				sX += 1
+			}
+			sY -= 1
+			sX = 0
+		}
+		findFarFlips()
+		executeFlips()
+	}
+	sX, sY = 0, 0
+	for sY > minSeatY {
+		for sX < maxSeatX {
+			a := slices.Index(Seating, [2]int{sX, sY})
+			if Seats[a].v == "#" {
+				result++
+			}
+			sX += 1
+		}
+		sY -= 1
+		sX = 0
+	}
+	printSeating()
+	return result
 }
 
 func printSeating() {
