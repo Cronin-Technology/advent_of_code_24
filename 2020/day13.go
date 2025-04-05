@@ -35,8 +35,6 @@ func main() {
 		}
 		r++
 	}
-	//slices.Sort(buses)
-	//fmt.Println(start, buses)
 	fmt.Println("Day 13 Part 1 Answer: ", dayThirteen_PartOne(start, buses))
 	fmt.Println("Day 13 Part 2 Answer: ", dayThirteen_PartTwo(start, buses))
 }
